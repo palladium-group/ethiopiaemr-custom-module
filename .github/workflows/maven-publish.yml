@@ -3,9 +3,9 @@ name: Build & Publish
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
+    branches: ["main", "add-ci/cd"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "add-ci/cd"]
 
 jobs:
   build:
@@ -24,8 +24,8 @@ jobs:
       - name: Build
         run: mvn -B -ntp clean verify --file pom.xml
 
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  publish:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/add-ci/cd')
     needs: build
     runs-on: ubuntu-latest
     permissions:
