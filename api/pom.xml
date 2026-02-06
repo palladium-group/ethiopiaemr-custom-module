@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>ethioemr-custom-module</artifactId>
+		<artifactId>ethiopiaemr-custom-module</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ethioemr-custom-module-api</artifactId>
+	<artifactId>ethiopiaemr-custom-module-api</artifactId>
 	<packaging>jar</packaging>
 	<name>EthioEMR Custom Module API</name>
 	<description>API project for EthioEMR Custom Module</description>
