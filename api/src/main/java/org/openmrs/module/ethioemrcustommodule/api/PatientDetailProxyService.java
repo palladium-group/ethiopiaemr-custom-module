@@ -24,10 +24,12 @@ public interface PatientDetailProxyService extends OpenmrsService {
 	 * Retrieves patient details from OpenFn server using the patient UUID.
 	 * 
 	 * @param patientUuid the UUID of the patient
-	 * @return JSON string containing patient details from OpenFn
-	 * @throws APIException if the request fails or patient UUID is invalid
+	 * @return DTO containing patient details from OpenFn
+	 * @throws APIException if the request fails, patient UUID is invalid, or patient not found in
+	 *             MPI
 	 */
 	@Authorized(EthioEmrCustomModuleConfig.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
-	String getPatientDetailsFromOpenFn(String patientUuid) throws APIException;
+	org.openmrs.module.ethioemrcustommodule.dto.OpenFnPatientDetailResponseDTO getPatientDetailsFromOpenFn(String patientUuid)
+	        throws APIException;
 }
