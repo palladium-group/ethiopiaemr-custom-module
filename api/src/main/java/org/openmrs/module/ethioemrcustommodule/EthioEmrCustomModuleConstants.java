@@ -48,4 +48,14 @@ public class EthioEmrCustomModuleConstants {
 	 * Default endpoint URL
 	 */
 	public static final String DEFAULT_ENDPOINT = "http://localhost:3000";
+	
+	/**
+	 * Global property for the OpenFn patient detail endpoint URL
+	 */
+	public static final String GP_OPENFN_PATIENT_DETAIL_ENDPOINT = "ethioemrcustommodule.openfnPatientDetailEndpoint";
+	
+	/**
+	 * Default OpenFn patient detail endpoint URL
+	 */
+	public static final String DEFAULT_OPENFN_PATIENT_DETAIL_ENDPOINT = "https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc";
 }

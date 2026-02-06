@@ -84,6 +84,14 @@
 			Default is http://localhost:3000
 		</description>
 	</globalProperty>
+	<globalProperty>
+		<property>ethioemrcustommodule.openfnPatientDetailEndpoint</property>
+		<defaultValue>https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc</defaultValue>
+		<description>
+			The OpenFn endpoint URL for retrieving patient details.
+			Default is https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc
+		</description>
+	</globalProperty>
 	<!-- /Required Global Properties -->
 	
 	<!--
@@ -105,12 +113,7 @@
 	-->
 	
 	<!-- Servlets -->
-	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 
-	<servlet>
-		<servlet-name>formDownload</servlet-name>
-		<servlet-class>@MODULE_PACKAGE@.web.FormDownloadServlet</servlet-class>
-	</servlet>
-	-->
+	<!-- REST endpoints are registered via Spring controllers, no servlet configuration needed -->
 	<!-- /Servlets -->
 	
 	

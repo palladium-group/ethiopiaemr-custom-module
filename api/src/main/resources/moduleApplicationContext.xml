@@ -60,5 +60,32 @@
         </property>
     </bean>
 
+    <bean id="ethioemrcustommodule.PatientDetailProxyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.ethioemrcustommodule.api.impl.PatientDetailProxyServiceImpl">
+                <property name="administrationService" ref="adminService"/>
+                <property name="patientService" ref="patientService"/>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.ethioemrcustommodule.api.PatientDetailProxyService</value>
+                <ref bean="ethioemrcustommodule.PatientDetailProxyService"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>
 
