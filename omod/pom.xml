@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>ethioemr-custom-module</artifactId>
+		<artifactId>ethiopiaemr-custom-module</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ethioemr-custom-module-omod</artifactId>
+	<artifactId>ethiopiaemr-custom-module-omod</artifactId>
 	<packaging>jar</packaging>
 	<name>EthioEMR Custom Module OMOD</name>
 	<description>Omod submodule for EthioEMR Custom Module</description>
@@ -15,7 +15,7 @@
 	<dependencies>
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>ethioemr-custom-module-api</artifactId>
+            <artifactId>ethiopiaemr-custom-module-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 		<dependency>

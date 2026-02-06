@@ -9,7 +9,7 @@
     </parent>
 
 	<groupId>org.openmrs.module</groupId>
-	<artifactId>ethioemr-custom-module</artifactId>
+	<artifactId>ethiopiaemr-custom-module</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>EthioEMR Custom Module</name>
@@ -22,6 +22,19 @@
 		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-ethioemr-custom-module.git</developerConnection>
 		<url>https://github.com/openmrs/openmrs-module-ethioemr-custom-module/</url>
 	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>mks-repo</id>
+			<name>Mekom Solutions Nexus Releases</name>
+			<url>https://nexus.mekomsolutions.net/repository/maven-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>mks-repo-snapshots</id>
+			<name>Mekom Solutions Nexus Snapshots</name>
+			<url>https://nexus.mekomsolutions.net/repository/maven-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<modules>
 		<module>api</module>
