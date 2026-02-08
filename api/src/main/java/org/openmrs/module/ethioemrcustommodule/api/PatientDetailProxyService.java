@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PatientDetailProxyService extends OpenmrsService {
 	
 	/**
-	 * Retrieves patient details from OpenFn server using the patient UUID.
+	 * Retrieves patient details from MPI through OpenFn server using the patient UUID.
 	 * 
 	 * @param patientUuid the UUID of the patient
 	 * @return DTO containing patient details from OpenFn

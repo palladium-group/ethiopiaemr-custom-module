@@ -19,104 +19,14 @@
 	
 	<require_version>${openmrsPlatformVersion}</require_version>
 
-	<require_modules>
-		<require_module>org.openmrs.event</require_module>
-	</require_modules>
-	
-	<!-- Extensions -->
-	<extension>
-		<point>org.openmrs.admin.list</point>
-		<class>org.openmrs.module.ethioemrcustommodule.extension.html.AdminList</class>
-	</extension>
-
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
 	</aware_of_modules>
 	
-	
-	<!-- AOP
-	<advice>
-		<point>org.openmrs.api.FormService</point>
-		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
-	</advice>
-	 /AOP -->
-	
-	
-	<!-- Required Privileges 
-	<privilege>
-		<name>Form Entry</name>
-		<description>Allows user to access Form Entry pages/functions</description>
-	</privilege>
-	 /Required Privileges -->
-
-
-	<!-- Required Global Properties -->
-	<globalProperty>
-		<property>ethioemrcustommodule.lastProcessedDrugOrderDate</property>
-		<defaultValue></defaultValue>
-		<description>
-			The last processed drug order date (format: yyyy-MM-dd HH:mm:ss). 
-			This is automatically updated by the scheduler after each successful sync.
-			Leave empty to start from 24 hours ago on first run.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>ethioemrcustommodule.drugOrderSyncInterval</property>
-		<defaultValue>300</defaultValue>
-		<description>
-			The scheduler interval in seconds for drug order sync task. 
-			Default is 300 seconds (5 minutes).
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>ethioemrcustommodule.drugOrderSyncBatchSize</property>
-		<defaultValue>100</defaultValue>
-		<description>
-			Maximum number of drug orders to process per scheduler run. 
-			Default is 100.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>ethioemrcustommodule.drugOrderSyncEndpoint</property>
-		<defaultValue>http://localhost:3000</defaultValue>
-		<description>
-			The external endpoint URL where drug orders will be sent via POST request.
-			Default is http://localhost:3000
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>ethioemrcustommodule.openfnPatientDetailEndpoint</property>
-		<defaultValue>https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc</defaultValue>
-		<description>
-			The OpenFn endpoint URL for retrieving patient details.
-			Default is https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc
-		</description>
-	</globalProperty>
-	<!-- /Required Global Properties -->
-	
-	<!--
-	<dwr>
-		<allow>
-			<create creator="new" javascript="DWRFormEntryService">
-				<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/>
-				<include method="enterForm"/>
-			</create>
-		</allow>
-
-		<signatures>
-			<![CDATA[
-			import @MODULE_PACKAGE@.web.DWRFormEntryService;
-			DWRFormEntryService.enterForm(Integer patientId, Integer formId, boolean useEncounter, List<String> fields);
-			]]>
-		</signatures>	
-	</dwr>
-	-->
-	
 	<!-- Servlets -->
 	<!-- REST endpoints are registered via Spring controllers, no servlet configuration needed -->
 	<!-- /Servlets -->
-	
-	
+
 	<!-- Internationalization -->
 	<!-- All message codes should start with ethioemrcustommodule.* -->
 	<messages>
