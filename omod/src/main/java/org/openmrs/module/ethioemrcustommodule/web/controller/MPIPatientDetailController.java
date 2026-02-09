@@ -43,6 +43,11 @@ public class MPIPatientDetailController {
 			
 			// Get patient details from MPI via service
 			FHIRPatientResponseDTO responseDTO = MPIPatientDetailProxyService.getPatientDetailsFromMPI(patientUuid);
+
+			if (responseDTO == null) {
+				log.warn("Patient details not found in MPI for UUID: " + patientUuid);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 			
 			// Set content type
 			response.setContentType("application/json");

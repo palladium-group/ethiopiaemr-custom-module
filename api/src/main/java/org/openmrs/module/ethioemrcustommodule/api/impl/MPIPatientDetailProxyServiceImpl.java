@@ -9,20 +9,11 @@
  */
 package org.openmrs.module.ethioemrcustommodule.api.impl;
 
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
@@ -31,8 +22,10 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConstants;
+import org.openmrs.module.ethioemrcustommodule.api.HttpClientService;
 import org.openmrs.module.ethioemrcustommodule.api.MPIPatientDetailProxyService;
 import org.openmrs.module.ethioemrcustommodule.dto.FHIRPatientResponseDTO;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Implementation of MPIPatientDetailProxyService for proxying patient detail requests to MPI.
@@ -45,151 +38,96 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 	
 	private PatientService patientService;
 	
+	private HttpClientService httpClientService;
+	
 	/**
-	 * Injected in moduleApplicationContext.xml
+	 * Injected via moduleApplicationContext.xml
 	 */
 	public void setAdministrationService(AdministrationService administrationService) {
 		this.administrationService = administrationService;
 	}
 	
 	/**
-	 * Injected in moduleApplicationContext.xml
+	 * Injected via moduleApplicationContext.xml
 	 */
 	public void setPatientService(PatientService patientService) {
 		this.patientService = patientService;
 	}
 	
+	/**
+	 * Injected via moduleApplicationContext.xml
+	 */
+	public void setHttpClientService(HttpClientService httpClientService) {
+		this.httpClientService = httpClientService;
+	}
+	
 	@Override
 	public FHIRPatientResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException {
 		if (patientUuid == null || patientUuid.trim().isEmpty()) {
-			throw new APIException("Patient UUID cannot be null or empty");
+			throw new APIException("ethioemrcustommodule.error.patientUuidRequired");
 		}
-		
-		// Get patient by UUID
+
 		Patient patient = patientService.getPatientByUuid(patientUuid);
 		if (patient == null) {
-			throw new APIException("Patient with UUID " + patientUuid + " not found");
+			throw new APIException("ethioemrcustommodule.error.patientNotFound");
 		}
-		
-		// Get healthId identifier type by UUID from global property
+
 		String healthIdIdentifierTypeUuid = getHealthIdIdentifierTypeUuid();
 		PatientIdentifierType healthIdType = patientService.getPatientIdentifierTypeByUuid(healthIdIdentifierTypeUuid);
 		if (healthIdType == null) {
-			throw new APIException("Patient identifier type with UUID " + healthIdIdentifierTypeUuid + " not found in the system");
+			throw new APIException("ethioemrcustommodule.error.identifierTypeNotFound");
 		}
-		
-		// Get patient's healthId identifier
+
 		PatientIdentifier healthIdIdentifier = patient.getPatientIdentifier(healthIdType);
-		if (healthIdIdentifier == null || healthIdIdentifier.getIdentifier() == null
-		        || healthIdIdentifier.getIdentifier().trim().isEmpty()) {
-			throw new APIException("Patient with UUID " + patientUuid + " does not have a healthId identifier");
+		if (healthIdIdentifier == null || healthIdIdentifier.getIdentifier() == null) {
+			throw new APIException("ethioemrcustommodule.error.missingHealthId");
 		}
-		
+
 		String healthId = healthIdIdentifier.getIdentifier().trim();
-		log.info("Proxying patient detail request for UUID: " + patientUuid + " with healthId: " + healthId);
-		
+		log.info("Requesting MPI details for healthId: " + healthId);
+
 		try {
-			// Get MPI endpoint from global property
 			String endpoint = getMPIEndpoint();
-			
-			// Create request payload with healthId
-			ObjectMapper mapper = new ObjectMapper();
-			ObjectNode requestPayload = mapper.createObjectNode();
+
+			Map<String, String> requestPayload = new HashMap<>();
 			requestPayload.put("healthId", healthId);
-			String jsonPayload = mapper.writeValueAsString(requestPayload);
-			
-			// Create HTTP client with timeout configuration
-			RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000) // 10 seconds
-			        .setSocketTimeout(30000) // 30 seconds
-			        .setConnectionRequestTimeout(10000) // 10 seconds
-			        .build();
-			
-			HttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
-			
-			// Create POST request
-			HttpPost httpPost = new HttpPost(endpoint);
-			httpPost.setHeader("Content-Type", "application/json");
-			httpPost.setHeader("Accept", "application/json");
-			httpPost.setEntity(new StringEntity(jsonPayload, StandardCharsets.UTF_8));
-			
-			// Execute request
-			log.debug("Sending POST request to MPI endpoint: " + endpoint);
-			log.debug("Request payload: " + jsonPayload);
-			
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			log.info("MPI response code: " + statusCode);
-			
-			// Read response body
-			HttpEntity responseEntity = httpResponse.getEntity();
-			String responseBody = null;
-			if (responseEntity != null) {
-				responseBody = EntityUtils.toString(responseEntity, StandardCharsets.UTF_8);
-				EntityUtils.consume(responseEntity); // Ensure entity is fully consumed
+
+			ResponseEntity<FHIRPatientResponseDTO> response = httpClientService.post(endpoint, requestPayload,
+					FHIRPatientResponseDTO.class);
+
+			FHIRPatientResponseDTO responseDTO = response.getBody();
+
+			if (responseDTO == null || responseDTO.isPatientNotFound()) {
+				log.info("Patient with healthId " + healthId + " not found in MPI.");
+				return null;
 			}
-			
-			if (responseBody == null || responseBody.trim().isEmpty()) {
-				throw new APIException("Empty response received from MPI");
-			}
-			
-			log.debug("MPI response: " + responseBody);
-			
-			// Parse JSON response to DTO
-			FHIRPatientResponseDTO responseDTO;
-			try {
-				responseDTO = mapper.readValue(responseBody, FHIRPatientResponseDTO.class);
-			}
-			catch (Exception e) {
-				log.error("Error parsing MPI response JSON", e);
-				throw new APIException("Error parsing response from MPI: " + e.getMessage(), e);
-			}
-			
-			// Check if patient not found in MPI
-			if (responseDTO.isPatientNotFound()) {
-				log.warn("Patient with healthId " + healthId + " not found in MPI system");
-				throw new APIException("Patient not found in MPI system");
-			}
-			
+
 			return responseDTO;
-			
+
 		}
 		catch (APIException e) {
 			throw e;
 		}
 		catch (Exception e) {
-			log.error("Error proxying patient detail request to MPI", e);
-			throw new APIException("Error retrieving patient details from MPI: " + e.getMessage(), e);
+			log.error("Failed to communicate with MPI for healthId: " + healthId, e);
+			throw new APIException("ethioemrcustommodule.error.mpiCommunicationError", e);
 		}
 	}
 	
-	/**
-	 * Gets the MPI endpoint URL from global properties.
-	 * 
-	 * @return the MPI endpoint URL
-	 */
 	private String getMPIEndpoint() {
 		String endpoint = administrationService
 		        .getGlobalProperty(EthioEmrCustomModuleConstants.GP_MPI_PATIENT_DETAIL_ENDPOINT);
 		if (endpoint == null || endpoint.trim().isEmpty()) {
-			log.warn("MPI endpoint not configured in global properties for the key "
-			        + EthioEmrCustomModuleConstants.GP_MPI_PATIENT_DETAIL_ENDPOINT);
-			throw new APIException("MPI endpoint not configured");
+			throw new APIException("MPI endpoint global property is not configured.");
 		}
 		return endpoint.trim();
 	}
 	
-	/**
-	 * Gets the healthId identifier type UUID from global properties.
-	 * 
-	 * @return the healthId identifier type UUID
-	 */
 	private String getHealthIdIdentifierTypeUuid() {
 		String uuid = administrationService
 		        .getGlobalProperty(EthioEmrCustomModuleConstants.GP_HEALTH_ID_IDENTIFIER_TYPE_UUID);
 		if (uuid == null || uuid.trim().isEmpty()) {
-			log.warn("HealthId identifier type UUID not configured in global properties for the key "
-			        + EthioEmrCustomModuleConstants.GP_HEALTH_ID_IDENTIFIER_TYPE_UUID);
-			throw new APIException("HealthId identifier type UUID not configured");
+			throw new APIException("HealthId identifier type UUID global property is not configured.");
 		}
 		return uuid.trim();
 	}

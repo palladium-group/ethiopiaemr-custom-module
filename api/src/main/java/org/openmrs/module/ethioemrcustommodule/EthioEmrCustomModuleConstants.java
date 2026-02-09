@@ -60,7 +60,29 @@ public class EthioEmrCustomModuleConstants {
 	public static final String GP_HEALTH_ID_IDENTIFIER_TYPE_UUID = "ethioemrcustommodule.healthIdIdentifierTypeUuid";
 	
 	/**
-	 * Default MPI patient detail endpoint URL
+	 * Global property for HTTP connection timeout in milliseconds
 	 */
-	public static final String DEFAULT_MPI_PATIENT_DETAIL_ENDPOINT = "https://app.openfn.org/i/e1efbe93-8784-4a16-8f56-fcff42b9c4cc";
+	public static final String GP_HTTP_CONNECT_TIMEOUT = "ethioemrcustommodule.httpConnectTimeout";
+	
+	/**
+	 * Global property for HTTP socket timeout in milliseconds
+	 */
+	public static final String GP_HTTP_SOCKET_TIMEOUT = "ethioemrcustommodule.httpSocketTimeout";
+	
+	/**
+	 * Global property for HTTP connection request timeout in milliseconds
+	 */
+	public static final String GP_HTTP_CONNECTION_REQUEST_TIMEOUT = "ethioemrcustommodule.httpConnectionRequestTimeout";
+	
+	/**
+	 * Global property for HTTP maximum total connections
+	 */
+	public static final String GP_HTTP_MAX_TOTAL_CONNECTIONS = "ethioemrcustommodule.httpMaxTotalConnections";
+	
+	/**
+	 * Global property for HTTP maximum connections per route
+	 */
+	public static final String GP_HTTP_MAX_CONNECTIONS_PER_ROUTE = "ethioemrcustommodule.httpMaxConnectionsPerRoute";
+	
+
 }

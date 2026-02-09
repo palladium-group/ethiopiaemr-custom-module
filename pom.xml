@@ -112,6 +112,6 @@
 
 	<properties>
 		<openmrsPlatformVersion>2.8.1</openmrsPlatformVersion>
-
+		<springVersion>5.3.31</springVersion>
 	</properties>
 </project>

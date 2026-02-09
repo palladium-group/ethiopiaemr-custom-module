@@ -33,6 +33,17 @@
         </property>
     </bean>
 
+    <!-- HTTP Client Service Configuration -->
+    <bean id="ethioemrcustommodule.HttpClientService" class="org.openmrs.module.ethioemrcustommodule.api.impl.HttpClientServiceImpl">
+        <property name="administrationService" ref="adminService"/>
+    </bean>
+
+    <!-- Initialize HttpClientService after dependency injection -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="ethioemrcustommodule.HttpClientService"/>
+        <property name="targetMethod" value="initialize"/>
+    </bean>
+
     <bean id="ethioemrcustommodule.MPIPatientDetailProxyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
@@ -41,6 +52,7 @@
             <bean class="org.openmrs.module.ethioemrcustommodule.api.impl.MPIPatientDetailProxyServiceImpl">
                 <property name="administrationService" ref="adminService"/>
                 <property name="patientService" ref="patientService"/>
+                <property name="httpClientService" ref="ethioemrcustommodule.HttpClientService"/>
             </bean>
         </property>
         <property name="preInterceptors">

@@ -26,7 +26,7 @@ public class FHIRPatientResponseDTO {
 	
 	@JsonProperty("success")
 	private Boolean success;
-
+	
 	@JsonProperty("patientNotFound")
 	private Boolean patientNotFound;
 	
@@ -60,6 +60,6 @@ public class FHIRPatientResponseDTO {
 	 * @return true if patient not found, false otherwise
 	 */
 	public boolean isPatientNotFound() {
-		return patientNotFound;
+		return patientNotFound != null && patientNotFound;
 	}
 }
