@@ -31,13 +31,13 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConstants;
-import org.openmrs.module.ethioemrcustommodule.api.PatientDetailProxyService;
-import org.openmrs.module.ethioemrcustommodule.dto.OpenFnPatientDetailResponseDTO;
+import org.openmrs.module.ethioemrcustommodule.api.MPIPatientDetailProxyService;
+import org.openmrs.module.ethioemrcustommodule.dto.MPIPatientDetailResponseDTO;
 
 /**
- * Implementation of PatientDetailProxyService for proxying patient detail requests to OpenFn.
+ * Implementation of MPIPatientDetailProxyService for proxying patient detail requests to MPI.
  */
-public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements PatientDetailProxyService {
+public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService implements MPIPatientDetailProxyService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -60,7 +60,7 @@ public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements
 	}
 	
 	@Override
-	public OpenFnPatientDetailResponseDTO getPatientDetailsFromOpenFn(String patientUuid) throws APIException {
+	public MPIPatientDetailResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException {
 		if (patientUuid == null || patientUuid.trim().isEmpty()) {
 			throw new APIException("Patient UUID cannot be null or empty");
 		}
@@ -88,8 +88,8 @@ public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements
 		log.info("Proxying patient detail request for UUID: " + patientUuid + " with healthId: " + healthId);
 		
 		try {
-			// Get OpenFn endpoint from global property
-			String endpoint = getOpenFnEndpoint();
+			// Get MPI endpoint from global property
+			String endpoint = getMPIEndpoint();
 			
 			// Create request payload with healthId
 			ObjectMapper mapper = new ObjectMapper();
@@ -112,12 +112,12 @@ public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements
 			httpPost.setEntity(new StringEntity(jsonPayload, StandardCharsets.UTF_8));
 			
 			// Execute request
-			log.debug("Sending POST request to OpenFn endpoint: " + endpoint);
+			log.debug("Sending POST request to MPI endpoint: " + endpoint);
 			log.debug("Request payload: " + jsonPayload);
 			
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			log.info("OpenFn response code: " + statusCode);
+			log.info("MPI response code: " + statusCode);
 			
 			// Read response body
 			HttpEntity responseEntity = httpResponse.getEntity();
@@ -128,19 +128,19 @@ public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements
 			}
 			
 			if (responseBody == null || responseBody.trim().isEmpty()) {
-				throw new APIException("Empty response received from OpenFn");
+				throw new APIException("Empty response received from MPI");
 			}
 			
-			log.debug("OpenFn response: " + responseBody);
+			log.debug("MPI response: " + responseBody);
 			
 			// Parse JSON response to DTO
-			OpenFnPatientDetailResponseDTO responseDTO;
+			MPIPatientDetailResponseDTO responseDTO;
 			try {
-				responseDTO = mapper.readValue(responseBody, OpenFnPatientDetailResponseDTO.class);
+				responseDTO = mapper.readValue(responseBody, MPIPatientDetailResponseDTO.class);
 			}
 			catch (Exception e) {
-				log.error("Error parsing OpenFn response JSON", e);
-				throw new APIException("Error parsing response from OpenFn: " + e.getMessage(), e);
+				log.error("Error parsing MPI response JSON", e);
+				throw new APIException("Error parsing response from MPI: " + e.getMessage(), e);
 			}
 			
 			// Check if patient not found in MPI (404 error)
@@ -156,22 +156,23 @@ public class PatientDetailProxyServiceImpl extends BaseOpenmrsService implements
 			throw e;
 		}
 		catch (Exception e) {
-			log.error("Error proxying patient detail request to OpenFn", e);
-			throw new APIException("Error retrieving patient details from OpenFn: " + e.getMessage(), e);
+			log.error("Error proxying patient detail request to MPI", e);
+			throw new APIException("Error retrieving patient details from MPI: " + e.getMessage(), e);
 		}
 	}
 	
 	/**
-	 * Gets the OpenFn endpoint URL from global properties.
+	 * Gets the MPI endpoint URL from global properties.
 	 * 
-	 * @return the OpenFn endpoint URL
+	 * @return the MPI endpoint URL
 	 */
-	private String getOpenFnEndpoint() {
+	private String getMPIEndpoint() {
 		String endpoint = administrationService
-		        .getGlobalProperty(EthioEmrCustomModuleConstants.GP_OPENFN_PATIENT_DETAIL_ENDPOINT);
+		        .getGlobalProperty(EthioEmrCustomModuleConstants.GP_MPI_PATIENT_DETAIL_ENDPOINT);
 		if (endpoint == null || endpoint.trim().isEmpty()) {
-			log.warn("OpenFn endpoint not configured, using default");
-			return EthioEmrCustomModuleConstants.DEFAULT_OPENFN_PATIENT_DETAIL_ENDPOINT;
+			log.warn("MPI endpoint not configured in global properties for the key "
+			        + EthioEmrCustomModuleConstants.GP_MPI_PATIENT_DETAIL_ENDPOINT);
+			throw new APIException("MPI endpoint not configured");
 		}
 		return endpoint.trim();
 	}

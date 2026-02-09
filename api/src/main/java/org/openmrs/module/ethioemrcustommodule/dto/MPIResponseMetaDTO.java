@@ -13,10 +13,10 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO representing the meta section of OpenFn response.
+ * DTO representing the meta section of MPI response.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenFnResponseMetaDTO {
+public class MPIResponseMetaDTO {
 	
 	@JsonProperty("state")
 	private String state;

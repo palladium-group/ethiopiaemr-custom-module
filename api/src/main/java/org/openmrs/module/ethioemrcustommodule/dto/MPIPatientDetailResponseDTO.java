@@ -13,30 +13,30 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO representing the OpenFn patient detail response.
+ * DTO representing the MPI patient detail response.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenFnPatientDetailResponseDTO {
+public class MPIPatientDetailResponseDTO {
 	
 	@JsonProperty("data")
-	private OpenFnResponseDataDTO data;
+	private MPIResponseDataDTO data;
 	
 	@JsonProperty("meta")
-	private OpenFnResponseMetaDTO meta;
+	private MPIResponseMetaDTO meta;
 	
-	public OpenFnResponseDataDTO getData() {
+	public MPIResponseDataDTO getData() {
 		return data;
 	}
 	
-	public void setData(OpenFnResponseDataDTO data) {
+	public void setData(MPIResponseDataDTO data) {
 		this.data = data;
 	}
 	
-	public OpenFnResponseMetaDTO getMeta() {
+	public MPIResponseMetaDTO getMeta() {
 		return meta;
 	}
 	
-	public void setMeta(OpenFnResponseMetaDTO meta) {
+	public void setMeta(MPIResponseMetaDTO meta) {
 		this.meta = meta;
 	}
 	

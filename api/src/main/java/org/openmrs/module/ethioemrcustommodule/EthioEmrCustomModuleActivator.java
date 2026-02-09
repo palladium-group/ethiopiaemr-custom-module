@@ -11,13 +11,7 @@ package org.openmrs.module.ethioemrcustommodule;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
-import org.openmrs.DrugOrder;
-import org.openmrs.event.Event;
-import org.openmrs.event.EventListener;
 import org.openmrs.module.BaseModuleActivator;
-import org.openmrs.module.DaemonToken;
-import org.openmrs.module.DaemonTokenAware;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown

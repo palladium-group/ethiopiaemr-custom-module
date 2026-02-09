@@ -13,11 +13,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO representing the data section of OpenFn response. This can contain either success data
- * (patient info) or error data.
+ * DTO representing the data section of MPI response. This can contain either success data (patient
+ * info) or error data.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenFnResponseDataDTO {
+public class MPIResponseDataDTO {
 	
 	// Success response fields
 	@JsonProperty("source")
@@ -46,7 +46,7 @@ public class OpenFnResponseDataDTO {
 	private Object request;
 	
 	@JsonProperty("response")
-	private OpenFnErrorResponseDTO response;
+	private MPIErrorResponseDTO response;
 	
 	public String getSource() {
 		return source;
@@ -112,11 +112,11 @@ public class OpenFnResponseDataDTO {
 		this.request = request;
 	}
 	
-	public OpenFnErrorResponseDTO getResponse() {
+	public MPIErrorResponseDTO getResponse() {
 		return response;
 	}
 	
-	public void setResponse(OpenFnErrorResponseDTO response) {
+	public void setResponse(MPIErrorResponseDTO response) {
 		this.response = response;
 	}
 	

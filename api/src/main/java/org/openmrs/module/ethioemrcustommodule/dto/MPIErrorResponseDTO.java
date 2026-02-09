@@ -13,10 +13,10 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO representing the error response section in OpenFn error responses.
+ * DTO representing the error response section in MPI error responses.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenFnErrorResponseDTO {
+public class MPIErrorResponseDTO {
 	
 	@JsonProperty("statusCode")
 	private Integer statusCode;

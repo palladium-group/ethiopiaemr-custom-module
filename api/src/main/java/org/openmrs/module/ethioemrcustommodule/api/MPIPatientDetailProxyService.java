@@ -13,23 +13,23 @@ import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConfig;
+import org.openmrs.module.ethioemrcustommodule.dto.MPIPatientDetailResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service for proxying patient detail requests to OpenFn server.
+ * Service for proxying patient detail requests to MPI server.
  */
-public interface PatientDetailProxyService extends OpenmrsService {
+public interface MPIPatientDetailProxyService extends OpenmrsService {
 	
 	/**
-	 * Retrieves patient details from MPI through OpenFn server using the patient UUID.
+	 * Retrieves patient details from MPI through MPI server using the patient UUID.
 	 * 
 	 * @param patientUuid the UUID of the patient
-	 * @return DTO containing patient details from OpenFn
+	 * @return DTO containing patient details from MPI
 	 * @throws APIException if the request fails, patient UUID is invalid, or patient not found in
 	 *             MPI
 	 */
 	@Authorized(EthioEmrCustomModuleConfig.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
-	org.openmrs.module.ethioemrcustommodule.dto.OpenFnPatientDetailResponseDTO getPatientDetailsFromOpenFn(String patientUuid)
-	        throws APIException;
+	MPIPatientDetailResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException;
 }
