@@ -32,7 +32,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConstants;
 import org.openmrs.module.ethioemrcustommodule.api.MPIPatientDetailProxyService;
-import org.openmrs.module.ethioemrcustommodule.dto.MPIPatientDetailResponseDTO;
+import org.openmrs.module.ethioemrcustommodule.dto.FHIRPatientResponseDTO;
 
 /**
  * Implementation of MPIPatientDetailProxyService for proxying patient detail requests to MPI.
@@ -60,7 +60,7 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 	}
 	
 	@Override
-	public MPIPatientDetailResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException {
+	public FHIRPatientResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException {
 		if (patientUuid == null || patientUuid.trim().isEmpty()) {
 			throw new APIException("Patient UUID cannot be null or empty");
 		}
@@ -134,16 +134,16 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 			log.debug("MPI response: " + responseBody);
 			
 			// Parse JSON response to DTO
-			MPIPatientDetailResponseDTO responseDTO;
+			FHIRPatientResponseDTO responseDTO;
 			try {
-				responseDTO = mapper.readValue(responseBody, MPIPatientDetailResponseDTO.class);
+				responseDTO = mapper.readValue(responseBody, FHIRPatientResponseDTO.class);
 			}
 			catch (Exception e) {
 				log.error("Error parsing MPI response JSON", e);
 				throw new APIException("Error parsing response from MPI: " + e.getMessage(), e);
 			}
 			
-			// Check if patient not found in MPI (404 error)
+			// Check if patient not found in MPI
 			if (responseDTO.isPatientNotFound()) {
 				log.warn("Patient with healthId " + healthId + " not found in MPI system");
 				throw new APIException("Patient not found in MPI system");

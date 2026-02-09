@@ -13,43 +13,53 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO representing the MPI patient detail response.
+ * DTO representing the FHIR patient response from MPI.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MPIPatientDetailResponseDTO {
+public class FHIRPatientResponseDTO {
 	
-	@JsonProperty("data")
-	private MPIResponseDataDTO data;
+	@JsonProperty("fhir")
+	private FHIRPatientDataDTO fhir;
 	
-	@JsonProperty("meta")
-	private MPIResponseMetaDTO meta;
+	@JsonProperty("message")
+	private String message;
 	
-	public MPIResponseDataDTO getData() {
-		return data;
+	@JsonProperty("success")
+	private Boolean success;
+
+	@JsonProperty("patientNotFound")
+	private Boolean patientNotFound;
+	
+	public FHIRPatientDataDTO getFhir() {
+		return fhir;
 	}
 	
-	public void setData(MPIResponseDataDTO data) {
-		this.data = data;
+	public void setFhir(FHIRPatientDataDTO fhir) {
+		this.fhir = fhir;
 	}
 	
-	public MPIResponseMetaDTO getMeta() {
-		return meta;
+	public String getMessage() {
+		return message;
 	}
 	
-	public void setMeta(MPIResponseMetaDTO meta) {
-		this.meta = meta;
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	public Boolean getSuccess() {
+		return success;
+	}
+	
+	public void setSuccess(Boolean success) {
+		this.success = success;
 	}
 	
 	/**
-	 * Checks if the response indicates patient not found (404 error).
+	 * Checks if the response indicates patient not found.
 	 * 
 	 * @return true if patient not found, false otherwise
 	 */
 	public boolean isPatientNotFound() {
-		if (data != null && data.getResponse() != null) {
-			Integer statusCode = data.getResponse().getStatusCode();
-			return statusCode != null && statusCode == 404;
-		}
-		return false;
+		return patientNotFound;
 	}
 }

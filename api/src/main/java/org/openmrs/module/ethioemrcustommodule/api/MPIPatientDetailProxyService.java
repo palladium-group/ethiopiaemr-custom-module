@@ -13,7 +13,7 @@ import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConfig;
-import org.openmrs.module.ethioemrcustommodule.dto.MPIPatientDetailResponseDTO;
+import org.openmrs.module.ethioemrcustommodule.dto.FHIRPatientResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -31,5 +31,5 @@ public interface MPIPatientDetailProxyService extends OpenmrsService {
 	 */
 	@Authorized(EthioEmrCustomModuleConfig.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
-	MPIPatientDetailResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException;
+	FHIRPatientResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException;
 }
