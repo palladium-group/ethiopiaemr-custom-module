@@ -71,10 +71,11 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 			throw new APIException("Patient with UUID " + patientUuid + " not found");
 		}
 		
-		// Get healthId identifier type
-		PatientIdentifierType healthIdType = patientService.getPatientIdentifierTypeByName("healthId");
+		// Get healthId identifier type by UUID from global property
+		String healthIdIdentifierTypeUuid = getHealthIdIdentifierTypeUuid();
+		PatientIdentifierType healthIdType = patientService.getPatientIdentifierTypeByUuid(healthIdIdentifierTypeUuid);
 		if (healthIdType == null) {
-			throw new APIException("Patient identifier type 'healthId' not found in the system");
+			throw new APIException("Patient identifier type with UUID " + healthIdIdentifierTypeUuid + " not found in the system");
 		}
 		
 		// Get patient's healthId identifier
@@ -175,5 +176,21 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 			throw new APIException("MPI endpoint not configured");
 		}
 		return endpoint.trim();
+	}
+	
+	/**
+	 * Gets the healthId identifier type UUID from global properties.
+	 * 
+	 * @return the healthId identifier type UUID
+	 */
+	private String getHealthIdIdentifierTypeUuid() {
+		String uuid = administrationService
+		        .getGlobalProperty(EthioEmrCustomModuleConstants.GP_HEALTH_ID_IDENTIFIER_TYPE_UUID);
+		if (uuid == null || uuid.trim().isEmpty()) {
+			log.warn("HealthId identifier type UUID not configured in global properties for the key "
+			        + EthioEmrCustomModuleConstants.GP_HEALTH_ID_IDENTIFIER_TYPE_UUID);
+			throw new APIException("HealthId identifier type UUID not configured");
+		}
+		return uuid.trim();
 	}
 }
