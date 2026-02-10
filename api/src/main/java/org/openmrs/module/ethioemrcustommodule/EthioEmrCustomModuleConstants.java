@@ -55,11 +55,6 @@ public class EthioEmrCustomModuleConstants {
 	public static final String GP_MPI_PATIENT_DETAIL_ENDPOINT = "ethioemrcustommodule.MPIPatientDetailEndpoint";
 	
 	/**
-	 * Global property for the healthId patient identifier type UUID
-	 */
-	public static final String GP_HEALTH_ID_IDENTIFIER_TYPE_UUID = "ethioemrcustommodule.healthIdIdentifierTypeUuid";
-	
-	/**
 	 * HTTP connection timeout in milliseconds
 	 */
 	public static final int HTTP_CONNECT_TIMEOUT = 10000;
@@ -84,5 +79,4 @@ public class EthioEmrCustomModuleConstants {
 	 */
 	public static final int HTTP_MAX_CONNECTIONS_PER_ROUTE = 20;
 	
-
 }

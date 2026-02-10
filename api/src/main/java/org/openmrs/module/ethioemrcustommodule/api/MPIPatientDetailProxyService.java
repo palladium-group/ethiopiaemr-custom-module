@@ -22,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MPIPatientDetailProxyService extends OpenmrsService {
 	
 	/**
-	 * Retrieves patient details from MPI through MPI server using the patient UUID.
+	 * Retrieves patient details from MPI through MPI server using the patient healthId.
 	 * 
-	 * @param patientUuid the UUID of the patient
+	 * @param patientHealthId the healthId of the patient
 	 * @return DTO containing patient details from MPI
-	 * @throws APIException if the request fails, patient UUID is invalid, or patient not found in
-	 *             MPI
+	 * @throws APIException if the request fails, patient healthId is invalid, or patient not found
+	 *             in MPI
 	 */
 	@Authorized(EthioEmrCustomModuleConfig.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
-	FHIRPatientResponseDTO getPatientDetailsFromMPI(String patientUuid) throws APIException;
+	FHIRPatientResponseDTO getPatientDetailsFromMPIByHealthId(String patientHealthId) throws APIException;
 }
