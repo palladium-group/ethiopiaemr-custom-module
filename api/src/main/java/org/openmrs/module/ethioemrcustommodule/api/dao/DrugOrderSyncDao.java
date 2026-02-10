@@ -16,27 +16,17 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.DrugOrder;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
-import org.openmrs.module.ethioemrcustommodule.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository("ethioemrcustommodule.EthioEmrCustomModuleDao")
-public class EthioEmrCustomModuleDao {
+@Repository("ethioemrcustommodule.DrugOrderSyncDao")
+public class DrugOrderSyncDao {
 	
 	@Autowired
 	DbSessionFactory sessionFactory;
 	
 	private DbSession getSession() {
 		return sessionFactory.getCurrentSession();
-	}
-	
-	public Item getItemByUuid(String uuid) {
-		return (Item) getSession().createCriteria(Item.class).add(Restrictions.eq("uuid", uuid)).uniqueResult();
-	}
-	
-	public Item saveItem(Item item) {
-		getSession().saveOrUpdate(item);
-		return item;
 	}
 	
 	/**

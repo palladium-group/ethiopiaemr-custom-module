@@ -13,7 +13,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>EthioEMR Custom Module</name>
-	<description>org.openmrs.module.ethioemrcustommodule</description>
+	<description>Ethiopia specific custom backend features</description>
 
 	<url>https://wiki.openmrs.org/</url>
 
@@ -51,12 +51,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>event-api</artifactId>
-				<version>4.0.0-SNAPSHOT</version>
-				<scope>provided</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -91,107 +85,9 @@
 					<version>1.0.1</version>
 				</plugin>
 				<plugin>
-					<groupId>org.commonjava.maven.plugins</groupId>
-					<artifactId>directory-maven-plugin</artifactId>
-					<version>0.1</version>
-					<executions>
-						<execution>
-							<id>directories</id>
-							<goals>
-								<goal>highest-basedir</goal>
-							</goals>
-							<phase>validate</phase>
-							<configuration>
-								<property>main.basedir</property>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>com.mycila</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>3.0</version>
-					<configuration>
-						<header>${main.basedir}${file.separator}license-header.txt</header>
-						<headerDefinitions>
-							<headerDefinition>${main.basedir}${file.separator}license-format.xml</headerDefinition>
-						</headerDefinitions>
-						<mapping>
-							<java>JAVA_STYLE</java>
-							<xml>MYXML_STYLE</xml>
-						</mapping>
-						<includes>
-							<include>**/*.java</include>
-							<include>**/*.xml</include>
-							<include>**/*.properties</include>
-						</includes>
-						<excludes>
-							<exclude>license-format.xml</exclude>
-							<exclude>**/pom.xml</exclude>
-							<exclude>**/target/**</exclude>
-							<exclude>.git/**</exclude>
-							<exclude>.idea/**</exclude>
-							<exclude>.settings/**</exclude>
-							<exclude>.externalToolBuilders/</exclude>
-							<exclude>nbproject/private/</exclude>
-							<exclude>.vscode/**</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<id>add-license</id>
-							<goals>
-								<goal>format</goal>
-							</goals>
-							<phase>validate</phase>
-						</execution>
-					</executions>
-				</plugin>
-				<!-- Fix for "Failed to execute goal org.apache.maven.plugins:maven-resources-plugin:3.2.0:resources (default-resources) on project application-etude: Input length = 1" -->
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.1.0</version>
-				</plugin>
-				<!-- Spotless plugin -->
-				<plugin>
-					<groupId>com.diffplug.spotless</groupId>
-					<artifactId>spotless-maven-plugin</artifactId>
-					<version>2.27.2</version>
-					<configuration>
-						<java>
-							<licenseHeader>
-								<file>${project.basedir}/license-header.txt</file>
-							</licenseHeader>
-							<eclipse>
-								<file>${project.basedir}/OpenMRSFormatter.xml</file>
-							</eclipse>
-							<removeUnusedImports/>
-							<importOrder>
-								<order>javax,java</order>
-							</importOrder>
-						</java>
-						<formats>
-							<format>
-								<includes>
-									<include>**/*.xml</include>
-								</includes>
-								<licenseHeader>
-									<file>${project.basedir}/license-header.txt</file>
-									<delimiter>^(?!&lt;\?xml)</delimiter>
-								</licenseHeader>
-							</format>
-						</formats>
-					</configuration>
-					<executions>
-						<execution>
-							<id>spotless-apply</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>apply</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -222,6 +118,7 @@
 	</pluginRepositories>
 
 	<properties>
-		<openmrsPlatformVersion>1.11.6</openmrsPlatformVersion>
+		<openmrsPlatformVersion>2.8.1</openmrsPlatformVersion>
+		<springVersion>5.3.31</springVersion>
 	</properties>
 </project>

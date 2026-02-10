@@ -48,4 +48,35 @@ public class EthioEmrCustomModuleConstants {
 	 * Default endpoint URL
 	 */
 	public static final String DEFAULT_ENDPOINT = "http://localhost:3000";
+	
+	/**
+	 * Global property for the MPI patient detail endpoint URL
+	 */
+	public static final String GP_MPI_PATIENT_DETAIL_ENDPOINT = "ethioemrcustommodule.MPIPatientDetailEndpoint";
+	
+	/**
+	 * HTTP connection timeout in milliseconds
+	 */
+	public static final int HTTP_CONNECT_TIMEOUT = 10000;
+	
+	/**
+	 * HTTP socket timeout in milliseconds
+	 */
+	public static final int HTTP_SOCKET_TIMEOUT = 30000;
+	
+	/**
+	 * HTTP connection request timeout in milliseconds
+	 */
+	public static final int HTTP_CONNECTION_REQUEST_TIMEOUT = 5000;
+	
+	/**
+	 * HTTP maximum total connections
+	 */
+	public static final int HTTP_MAX_TOTAL_CONNECTIONS = 50;
+	
+	/**
+	 * HTTP maximum connections per route
+	 */
+	public static final int HTTP_MAX_CONNECTIONS_PER_ROUTE = 20;
+	
 }

@@ -4,40 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
   		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="ethioemrcustommodule.EthioEmrCustomModuleService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.ethioemrcustommodule.api.impl.EthioEmrCustomModuleServiceImpl">
-                <property name="dao" ref="ethioemrcustommodule.EthioEmrCustomModuleDao"/>
-                <property name="userService" ref="userService"/>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>org.openmrs.module.ethioemrcustommodule.api.EthioEmrCustomModuleService</value>
-                <ref bean="ethioemrcustommodule.EthioEmrCustomModuleService"/>
-            </list>
-        </property>
-    </bean>
-
     <bean id="ethioemrcustommodule.DrugOrderSyncService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
             <bean class="org.openmrs.module.ethioemrcustommodule.api.impl.DrugOrderSyncServiceImpl">
-                <property name="dao" ref="ethioemrcustommodule.EthioEmrCustomModuleDao"/>
+                <property name="dao" ref="ethioemrcustommodule.DrugOrderSyncDao"/>
                 <property name="administrationService" ref="adminService"/>
                 <property name="orderService" ref="orderService"/>
                 <property name="patientService" ref="patientService"/>
@@ -56,6 +29,45 @@
             <list merge="true">
                 <value>org.openmrs.module.ethioemrcustommodule.api.DrugOrderSyncService</value>
                 <ref bean="ethioemrcustommodule.DrugOrderSyncService"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- HTTP Client Service Configuration -->
+    <bean id="ethioemrcustommodule.HttpClientService" class="org.openmrs.module.ethioemrcustommodule.api.impl.HttpClientServiceImpl">
+        <property name="administrationService" ref="adminService"/>
+    </bean>
+
+    <!-- Initialize HttpClientService after dependency injection -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="ethioemrcustommodule.HttpClientService"/>
+        <property name="targetMethod" value="initialize"/>
+    </bean>
+
+    <bean id="ethioemrcustommodule.MPIPatientDetailProxyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.ethioemrcustommodule.api.impl.MPIPatientDetailProxyServiceImpl">
+                <property name="administrationService" ref="adminService"/>
+                <property name="patientService" ref="patientService"/>
+                <property name="httpClientService" ref="ethioemrcustommodule.HttpClientService"/>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.ethioemrcustommodule.api.MPIPatientDetailProxyService</value>
+                <ref bean="ethioemrcustommodule.MPIPatientDetailProxyService"/>
             </list>
         </property>
     </bean>

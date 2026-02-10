@@ -21,7 +21,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.DrugOrder;
-import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
@@ -31,11 +30,10 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.PatientService;
-import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.ethioemrcustommodule.EthioEmrCustomModuleConstants;
 import org.openmrs.module.ethioemrcustommodule.api.DrugOrderSyncService;
-import org.openmrs.module.ethioemrcustommodule.api.dao.EthioEmrCustomModuleDao;
+import org.openmrs.module.ethioemrcustommodule.api.dao.DrugOrderSyncDao;
 import org.openmrs.module.ethioemrcustommodule.dto.DrugOrderDTO;
 import org.openmrs.module.ethioemrcustommodule.dto.DrugOrderSyncDTO;
 import org.openmrs.module.ethioemrcustommodule.dto.DrugDTO;
@@ -55,7 +53,7 @@ public class DrugOrderSyncServiceImpl extends BaseOpenmrsService implements Drug
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	private EthioEmrCustomModuleDao dao;
+	private DrugOrderSyncDao dao;
 	
 	private AdministrationService administrationService;
 	
@@ -66,7 +64,7 @@ public class DrugOrderSyncServiceImpl extends BaseOpenmrsService implements Drug
 	/**
 	 * Injected in moduleApplicationContext.xml
 	 */
-	public void setDao(EthioEmrCustomModuleDao dao) {
+	public void setDao(DrugOrderSyncDao dao) {
 		this.dao = dao;
 	}
 	
