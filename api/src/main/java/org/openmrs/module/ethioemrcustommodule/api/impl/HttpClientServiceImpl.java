@@ -82,30 +82,18 @@ public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpCli
 	private ClientHttpRequestFactory createRequestFactory() {
 		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
 		
-		connectionManager.setMaxTotal(getGlobalInt(EthioEmrCustomModuleConstants.GP_HTTP_MAX_TOTAL_CONNECTIONS, 100));
-		connectionManager.setDefaultMaxPerRoute(getGlobalInt(
-		    EthioEmrCustomModuleConstants.GP_HTTP_MAX_CONNECTIONS_PER_ROUTE, 20));
+		connectionManager.setMaxTotal(EthioEmrCustomModuleConstants.HTTP_MAX_TOTAL_CONNECTIONS);
+		connectionManager.setDefaultMaxPerRoute(EthioEmrCustomModuleConstants.HTTP_MAX_CONNECTIONS_PER_ROUTE);
 		
 		CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).build();
 		
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 		
-		factory.setConnectTimeout(getGlobalInt(EthioEmrCustomModuleConstants.GP_HTTP_CONNECT_TIMEOUT, 5000));
-		factory.setReadTimeout(getGlobalInt(EthioEmrCustomModuleConstants.GP_HTTP_SOCKET_TIMEOUT, 30000));
-		factory.setConnectionRequestTimeout(getGlobalInt(EthioEmrCustomModuleConstants.GP_HTTP_CONNECTION_REQUEST_TIMEOUT,
-		    5000));
+		factory.setConnectTimeout(EthioEmrCustomModuleConstants.HTTP_CONNECT_TIMEOUT);
+		factory.setReadTimeout(EthioEmrCustomModuleConstants.HTTP_SOCKET_TIMEOUT);
+		factory.setConnectionRequestTimeout(EthioEmrCustomModuleConstants.HTTP_CONNECTION_REQUEST_TIMEOUT);
 		
 		return factory;
 	}
 	
-	private int getGlobalInt(String property, int defaultValue) {
-		String val = administrationService.getGlobalProperty(property);
-		try {
-			return (val != null && !val.isEmpty()) ? Integer.parseInt(val.trim()) : defaultValue;
-		}
-		catch (NumberFormatException e) {
-			log.warn("Invalid value for " + property + ": " + val + ". Using default: " + defaultValue);
-			return defaultValue;
-		}
-	}
 }

@@ -60,29 +60,29 @@ public class EthioEmrCustomModuleConstants {
 	public static final String GP_HEALTH_ID_IDENTIFIER_TYPE_UUID = "ethioemrcustommodule.healthIdIdentifierTypeUuid";
 	
 	/**
-	 * Global property for HTTP connection timeout in milliseconds
+	 * HTTP connection timeout in milliseconds
 	 */
-	public static final String GP_HTTP_CONNECT_TIMEOUT = "ethioemrcustommodule.httpConnectTimeout";
+	public static final int HTTP_CONNECT_TIMEOUT = 10000;
 	
 	/**
-	 * Global property for HTTP socket timeout in milliseconds
+	 * HTTP socket timeout in milliseconds
 	 */
-	public static final String GP_HTTP_SOCKET_TIMEOUT = "ethioemrcustommodule.httpSocketTimeout";
+	public static final int HTTP_SOCKET_TIMEOUT = 30000;
 	
 	/**
-	 * Global property for HTTP connection request timeout in milliseconds
+	 * HTTP connection request timeout in milliseconds
 	 */
-	public static final String GP_HTTP_CONNECTION_REQUEST_TIMEOUT = "ethioemrcustommodule.httpConnectionRequestTimeout";
+	public static final int HTTP_CONNECTION_REQUEST_TIMEOUT = 5000;
 	
 	/**
-	 * Global property for HTTP maximum total connections
+	 * HTTP maximum total connections
 	 */
-	public static final String GP_HTTP_MAX_TOTAL_CONNECTIONS = "ethioemrcustommodule.httpMaxTotalConnections";
+	public static final int HTTP_MAX_TOTAL_CONNECTIONS = 50;
 	
 	/**
-	 * Global property for HTTP maximum connections per route
+	 * HTTP maximum connections per route
 	 */
-	public static final String GP_HTTP_MAX_CONNECTIONS_PER_ROUTE = "ethioemrcustommodule.httpMaxConnectionsPerRoute";
+	public static final int HTTP_MAX_CONNECTIONS_PER_ROUTE = 20;
 	
 
 }
