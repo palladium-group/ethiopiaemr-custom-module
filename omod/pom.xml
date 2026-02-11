@@ -9,8 +9,8 @@
 
 	<artifactId>ethiopiaemr-custom-module-omod</artifactId>
 	<packaging>jar</packaging>
-	<name>EthioEMR Custom Module OMOD</name>
-	<description>Omod submodule for EthioEMR Custom Module</description>
+	<name>EthiopiaEMR Custom Module OMOD</name>
+	<description>Omod submodule for EthiopiaEMR Custom Module</description>
 
 	<dependencies>
         <dependency>

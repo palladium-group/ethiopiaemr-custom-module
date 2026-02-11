@@ -9,8 +9,8 @@
 
 	<artifactId>ethiopiaemr-custom-module-api</artifactId>
 	<packaging>jar</packaging>
-	<name>EthioEMR Custom Module API</name>
-	<description>API project for EthioEMR Custom Module</description>
+	<name>EthiopiaEMR Custom Module API</name>
+	<description>API project for EthiopiaEMR Custom Module</description>
 
 	<dependencies>
 	<dependency>

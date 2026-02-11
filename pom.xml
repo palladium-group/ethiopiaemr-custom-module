@@ -12,15 +12,15 @@
 	<artifactId>ethiopiaemr-custom-module</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>EthioEMR Custom Module</name>
+	<name>EthiopiaEMR Custom Module</name>
 	<description>Ethiopia specific custom backend features</description>
 
 	<url>https://wiki.openmrs.org/</url>
 
 	<scm>
-		<connection>scm:git:git@github.com:openmrs/openmrs-module-ethioemr-custom-module.git</connection>
-		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-ethioemr-custom-module.git</developerConnection>
-		<url>https://github.com/openmrs/openmrs-module-ethioemr-custom-module/</url>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-ethiopiaemr-custom-module.git</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-ethiopiaemr-custom-module.git</developerConnection>
+		<url>https://github.com/openmrs/openmrs-module-ethiopiaemr-custom-module/</url>
 	</scm>
 	
 	<distributionManagement>
