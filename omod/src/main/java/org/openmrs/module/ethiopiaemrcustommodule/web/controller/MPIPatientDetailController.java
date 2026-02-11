@@ -45,7 +45,11 @@ public class MPIPatientDetailController {
 
 			if (responseDTO == null) {
 				log.warn("Patient details not found in MPI for healthId: " + healthId);
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				FHIRPatientResponseDTO errorResponse = new FHIRPatientResponseDTO();
+				errorResponse.setSuccess(false);
+				errorResponse.setMessage("Patient details not found in MPI for healthId: " + healthId);
+				errorResponse.setPatientNotFound(true);
+				return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 			}
 			
 			// Set content type

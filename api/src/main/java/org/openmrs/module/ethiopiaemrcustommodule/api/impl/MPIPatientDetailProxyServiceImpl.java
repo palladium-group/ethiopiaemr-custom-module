@@ -22,6 +22,7 @@ import org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleConstan
 import org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService;
 import org.openmrs.module.ethiopiaemrcustommodule.api.MPIPatientDetailProxyService;
 import org.openmrs.module.ethiopiaemrcustommodule.dto.FHIRPatientResponseDTO;
+import org.openmrs.module.ethiopiaemrcustommodule.dto.MPIPatientResponseDTO;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -72,11 +73,21 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 			
 			Map<String, String> requestPayload = new HashMap<>();
 			requestPayload.put("healthId", healthId);
-			
-			ResponseEntity<FHIRPatientResponseDTO> response = httpClientService.post(endpoint, requestPayload,
-					FHIRPatientResponseDTO.class);
-			
-			FHIRPatientResponseDTO responseDTO = response.getBody();
+
+			ResponseEntity<MPIPatientResponseDTO> response = httpClientService.post(
+					endpoint,
+					requestPayload,
+					MPIPatientResponseDTO.class
+			);
+
+			MPIPatientResponseDTO apiResponse = response.getBody();
+
+			if (apiResponse == null) {
+				log.error("Null response from MPI for healthId: " + healthId);
+				throw new APIException("ethiopiaemrcustommodule.error.mpiNullResponse");
+			}
+
+			FHIRPatientResponseDTO responseDTO = apiResponse.getData();
 			if (responseDTO == null || responseDTO.isPatientNotFound()) {
 				log.info("Patient with healthId " + healthId + " not found in MPI.");
 				return null;

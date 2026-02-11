@@ -54,12 +54,16 @@ public class FHIRPatientResponseDTO {
 		this.success = success;
 	}
 	
+	public void setPatientNotFound(Boolean patientNotFound) {
+		this.patientNotFound = patientNotFound;
+	}
+	
 	/**
 	 * Checks if the response indicates patient not found.
 	 * 
 	 * @return true if patient not found, false otherwise
 	 */
 	public boolean isPatientNotFound() {
-		return patientNotFound != null && patientNotFound;
+		return (patientNotFound != null && patientNotFound) || (success == null || !success) || (fhir == null);
 	}
 }
