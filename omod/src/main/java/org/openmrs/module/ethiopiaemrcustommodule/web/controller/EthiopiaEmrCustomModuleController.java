@@ -39,7 +39,7 @@ public class EthiopiaEmrCustomModuleController {
 	UserService userService;
 	
 	/** Success form view name */
-	private final String VIEW = "/module/ethiopiaemrcustommodule/ethioemrcustommodule";
+	private final String VIEW = "/module/ethiopiaemrcustommodule/ethiopiaemrcustommodule";
 	
 	/**
 	 * Initially called after the getUsers method to get the landing form name

@@ -13,6 +13,9 @@
 	</description>
 
 	<activator>org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleActivator</activator>
+	<mappingFiles>
+		PrescriptionOutbox.hbm.xml
+	</mappingFiles>
 	
 	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->

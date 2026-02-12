@@ -4,15 +4,42 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
- 
-    <!--
-    	See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
-    	documentation on this file.
-    
-        See http://www.liquibase.org/manual/home#available_database_refactorings
-        for a list of supported elements and attributes
-    -->
- 
 
- 
+    <changeSet id="ethiopiemr-custom-module-20231027-01" author="said_murad">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="prescription_outbox"/>
+            </not>
+        </preConditions>
+        <comment>Creating the outbox table to track prescriptions for external systems</comment>
+
+        <createTable tableName="prescription_outbox">
+            <column autoIncrement="true" name="outbox_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="encounter_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(20)" defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retry_count" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_error" type="text"/>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="outbox_encounter_fk"
+                                 baseTableName="prescription_outbox"
+                                 baseColumnNames="encounter_id"
+                                 referencedTableName="encounter"
+                                 referencedColumnNames="encounter_id"/>
+    </changeSet>
 </databaseChangeLog>

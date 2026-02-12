@@ -17,7 +17,7 @@ public class EthiopiaEmrCustomModuleConstants {
 	/**
 	 * Global property for the last processed drug order date
 	 */
-	public static final String GP_LAST_PROCESSED_DRUG_ORDER_DATE = "ethioemrcustommodule.lastProcessedDrugOrderDate";
+	public static final String GP_LAST_PROCESSED_DRUG_ORDER_DATE = "ethiopiaemrcustommodule.lastProcessedDrugOrderDate";
 	
 	/**
 	 * Global property for the scheduler interval in seconds
@@ -33,6 +33,11 @@ public class EthiopiaEmrCustomModuleConstants {
 	 * Global property for the external endpoint URL
 	 */
 	public static final String GP_DRUG_ORDER_SYNC_ENDPOINT = "ethiopiaemrcustommodule.drugOrderSyncEndpoint";
+	
+	/**
+	 * Global property for the drug order encounter type uuid
+	 */
+	public static final String GP_DRUG_ORDER_ENCOUNTER_TYPE_UUID = "ethiopiaemrcustommodule.drugOrderEncounterTYpeUuid";
 	
 	/**
 	 * Default scheduler interval in seconds (5 minutes)
