@@ -12,4 +12,4 @@ Hello, world.
     You are not logged in.
 <% } %>
 
-${ ui.includeFragment("ethioemrcustommodule", "users") }
+${ ui.includeFragment("ethiopiaemrcustommodule", "users") }
