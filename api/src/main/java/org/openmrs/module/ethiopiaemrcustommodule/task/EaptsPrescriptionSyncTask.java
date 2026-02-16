@@ -1,9 +1,12 @@
 package org.openmrs.module.ethiopiaemrcustommodule.task;
 
 import org.openmrs.Encounter;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleConstants;
 import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutbox;
+import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutboxStatus;
 import org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService;
 import org.openmrs.module.ethiopiaemrcustommodule.api.PrescriptionOutboxService;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -16,9 +19,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public class PrescriptionTransmissionTask extends AbstractTask {
+public class EaptsPrescriptionSyncTask extends AbstractTask {
 	
-	private static final Logger log = LoggerFactory.getLogger(PrescriptionTransmissionTask.class);
+	private static final Logger log = LoggerFactory.getLogger(EaptsPrescriptionSyncTask.class);
 	
 	@Override
 	public void execute() {
@@ -45,23 +48,26 @@ public class PrescriptionTransmissionTask extends AbstractTask {
 		Encounter encounter = outbox.getEncounter();
 		PrescriptionOutboxService outboxService = Context.getService(PrescriptionOutboxService.class);
 		HttpClientService httpClientService = Context.getService(HttpClientService.class);
-		AdministrationService adminService = Context.getAdministrationService();
+		AdministrationService administrationService = Context.getAdministrationService();
 		
 		try {
 			SimpleObject representation = (SimpleObject) ConversionUtil.convertToRepresentation(encounter,
 			    Representation.DEFAULT);
 			
-			String url = adminService.getGlobalProperty("ethiopiaemrcustommodule.eaptsPrescriptionSyncEndpoint");
-			
+			String endpoint = administrationService
+			        .getGlobalProperty(EthiopiaEmrCustomModuleConstants.GP_EAPTS_PRESCRIPTION_SYNC_ENDPOINT);
+			if (endpoint == null || endpoint.trim().isEmpty()) {
+				throw new APIException("EAPTS prescription sync endpoint global property is not configured.");
+			}
 			// Optional: Fetch API Key if required by the external system
 			// Map<String, String> headers = new HashMap<>();
-			// headers.put("X-API-KEY", adminService.getGlobalProperty("ethiopiaemrcustommodule.eaptsPrescriptionSync_api_key"));
+			// headers.put("X-API-KEY", administrationService.getGlobalProperty("ethiopiaemrcustommodule.eaptsPrescriptionSync_api_key"));
 			
 			// Send the POST request
-			ResponseEntity<String> response = httpClientService.post(url, representation, String.class);
+			ResponseEntity<String> response = httpClientService.post(endpoint, representation, String.class);
 			
 			if (response.getStatusCode().is2xxSuccessful()) {
-				outbox.setStatus("SENT");
+				outbox.setStatus(PrescriptionOutboxStatus.SENT);
 				outbox.setLastError(null);
 				log.info("Successfully sent prescription for encounter: " + encounter.getUuid());
 			} else {
@@ -79,7 +85,7 @@ public class PrescriptionTransmissionTask extends AbstractTask {
 	}
 	
 	private void updateOutboxAsFailed(PrescriptionOutbox outbox, String error) {
-		outbox.setStatus("FAILED");
+		outbox.setStatus(PrescriptionOutboxStatus.FAILED);
 		outbox.setRetryCount(outbox.getRetryCount() + 1);
 		outbox.setLastError(error);
 	}

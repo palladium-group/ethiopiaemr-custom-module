@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>webservices.rest-omod-common</artifactId>
-			<version>3.1.0-SNAPSHOT</version> <!-- Use the version compatible with your OpenMRS -->
+			<version>4.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

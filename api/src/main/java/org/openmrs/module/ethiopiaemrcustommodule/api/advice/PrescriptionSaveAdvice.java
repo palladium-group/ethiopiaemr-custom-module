@@ -6,6 +6,7 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleConstants;
 import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutbox;
+import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutboxStatus;
 import org.openmrs.module.ethiopiaemrcustommodule.api.PrescriptionOutboxService;
 import org.springframework.aop.AfterReturningAdvice;
 
@@ -50,7 +51,7 @@ public class PrescriptionSaveAdvice implements AfterReturningAdvice {
 		// Look for the most recent record for this encounter
 		PrescriptionOutbox existing = service.getLatestOutboxByEncounter(encounter);
 		
-		if (existing != null && "PENDING".equals(existing.getStatus())) {
+		if (existing != null && PrescriptionOutboxStatus.PENDING.equals(existing.getStatus())) {
 			// There is already a record waiting for the scheduler.
 			// We don't need to do anything. When the scheduler runs,
 			// it will pull the LATEST state of the encounter from the DB.
@@ -61,7 +62,7 @@ public class PrescriptionSaveAdvice implements AfterReturningAdvice {
 		// create a new PENDING entry to trigger a new sync.
 		PrescriptionOutbox outbox = new PrescriptionOutbox();
 		outbox.setEncounter(encounter);
-		outbox.setStatus("PENDING");
+		outbox.setStatus(PrescriptionOutboxStatus.PENDING);
 		outbox.setRetryCount(0);
 		outbox.setDateCreated(new Date());
 		

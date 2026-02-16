@@ -10,7 +10,7 @@ public class PrescriptionOutbox extends BaseOpenmrsObject {
 	
 	private Encounter encounter;
 	
-	private String status;
+	private PrescriptionOutboxStatus status;
 	
 	private Integer retryCount;
 	
@@ -50,11 +50,11 @@ public class PrescriptionOutbox extends BaseOpenmrsObject {
 		this.encounter = encounter;
 	}
 	
-	public String getStatus() {
+	public PrescriptionOutboxStatus getStatus() {
 		return status;
 	}
 	
-	public void setStatus(String status) {
+	public void setStatus(PrescriptionOutboxStatus status) {
 		this.status = status;
 	}
 	

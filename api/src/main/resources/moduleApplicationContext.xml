@@ -4,35 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
   		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="ethiopiaemrcustommodule.DrugOrderSyncService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.ethiopiaemrcustommodule.api.impl.DrugOrderSyncServiceImpl">
-                <property name="dao" ref="ethiopiaemrcustommodule.DrugOrderSyncDao"/>
-                <property name="administrationService" ref="adminService"/>
-                <property name="orderService" ref="orderService"/>
-                <property name="patientService" ref="patientService"/>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>org.openmrs.module.ethiopiaemrcustommodule.api.DrugOrderSyncService</value>
-                <ref bean="ethiopiaemrcustommodule.DrugOrderSyncService"/>
-            </list>
-        </property>
-    </bean>
-
     <!-- HTTP Client Service Configuration -->
     <bean id="ethiopiaemrcustommodule.HttpClientService" class="org.openmrs.module.ethiopiaemrcustommodule.api.impl.HttpClientServiceImpl">
         <property name="administrationService" ref="adminService"/>

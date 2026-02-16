@@ -14,8 +14,12 @@
 
         <many-to-one name="encounter" class="org.openmrs.Encounter" column="encounter_id" not-null="true" />
 
-        <property name="status" type="java.lang.String" column="status" length="20" not-null="true" />
-        <property name="retryCount" type="int" column="retry_count" not-null="true" />
+        <property name="status" column="status" not-null="true">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutboxStatus</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>        <property name="retryCount" type="int" column="retry_count" not-null="true" />
         <property name="lastError" type="java.lang.String" column="last_error" length="65535" />
         <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" />
         <property name="dateChanged" type="java.util.Date" column="date_changed" />

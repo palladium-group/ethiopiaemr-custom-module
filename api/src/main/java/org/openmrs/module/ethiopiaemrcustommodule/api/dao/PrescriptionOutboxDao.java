@@ -4,9 +4,12 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.openmrs.Encounter;
 import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutbox;
+import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutboxStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public class PrescriptionOutboxDao {
@@ -18,6 +21,7 @@ public class PrescriptionOutboxDao {
 	}
 	
 	public PrescriptionOutbox savePrescriptionOutbox(PrescriptionOutbox outbox) {
+		outbox.setDateChanged(new Date());
 		sessionFactory.getCurrentSession().saveOrUpdate(outbox);
 		return outbox;
 	}
@@ -29,13 +33,17 @@ public class PrescriptionOutboxDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<PrescriptionOutbox> getPendingPrescriptions(Integer limit) {
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(PrescriptionOutbox.class);
-		crit.add(Restrictions.eq("status", "PENDING"));
-		crit.addOrder(Order.asc("dateCreated"));
-		if (limit != null) {
-			crit.setMaxResults(limit);
+		String hql = "FROM PrescriptionOutbox p WHERE p.status = :status ORDER BY p.dateCreated ASC";
+		
+		Query<PrescriptionOutbox> query = sessionFactory.getCurrentSession().createQuery(hql, PrescriptionOutbox.class);
+		
+		query.setParameter("status", PrescriptionOutboxStatus.PENDING);
+		
+		if (limit != null && limit > 0) {
+			query.setMaxResults(limit);
 		}
-		return crit.list();
+		
+		return query.getResultList();
 	}
 	
 	public PrescriptionOutbox getLatestOutboxByEncounter(Encounter encounter) {
