@@ -21,6 +21,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.Map;
 
 public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpClientService {
 	
@@ -34,9 +35,6 @@ public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpCli
 		this.administrationService = administrationService;
 	}
 	
-	/**
-	 * Called via init-method in moduleApplicationContext.xml
-	 */
 	public void initialize() {
 		this.restTemplate = new RestTemplate(createRequestFactory());
 		log.info("HttpClientService initialized with Pooled Connection Manager");
@@ -44,49 +42,67 @@ public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpCli
 	
 	@Override
 	public <T> ResponseEntity<T> post(String url, Object request, Class<T> responseType) {
+		return post(url, request, responseType, null);
+	}
+	
+	@Override
+	public <T> ResponseEntity<T> post(String url, Object request, Class<T> responseType, Map<String, String> extraHeaders) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
+			if (extraHeaders != null) {
+				extraHeaders.forEach(headers::add);
+			}
+
 			HttpEntity<?> entity = new HttpEntity<>(request, headers);
 			return restTemplate.postForEntity(url, entity, responseType);
 		}
 		catch (HttpStatusCodeException e) {
-			log.error("MPI Server returned error: " + e.getRawStatusCode() + " Body: " + e.getResponseBodyAsString());
-			throw new APIException("MPI service error: " + e.getStatusText(), e);
+			log.error("External Server error: " + e.getRawStatusCode() + " URL: " + url + " Body: " + e.getResponseBodyAsString());
+			throw new APIException("HTTP Post failed with status: " + e.getRawStatusCode(), e);
 		}
 		catch (Exception e) {
 			log.error("Communication failure with URL: " + url, e);
-			throw new APIException("ethiopiaemrcustommodule.error.httpFailure", e);
+			throw new APIException("Internal error during HTTP Post", e);
 		}
 	}
 	
 	@Override
 	public <T> ResponseEntity<T> get(String url, Class<T> responseType) {
+		return get(url, responseType, null);
+	}
+	
+	@Override
+	public <T> ResponseEntity<T> get(String url, Class<T> responseType, Map<String, String> extraHeaders) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+			if (extraHeaders != null) {
+				extraHeaders.forEach(headers::add);
+			}
+
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			return restTemplate.exchange(url, HttpMethod.GET, entity, responseType);
 		}
 		catch (HttpStatusCodeException e) {
-			log.error("MPI GET error: " + e.getRawStatusCode() + " Body: " + e.getResponseBodyAsString());
-			throw new APIException("MPI service error", e);
+			log.error("External Server GET error: " + e.getRawStatusCode() + " URL: " + url);
+			throw new APIException("HTTP Get failed with status: " + e.getRawStatusCode(), e);
 		}
 		catch (Exception e) {
-			throw new APIException("HTTP GET request failed", e);
+			log.error("Communication failure with URL: " + url, e);
+			throw new APIException("Internal error during HTTP Get", e);
 		}
 	}
 	
 	private ClientHttpRequestFactory createRequestFactory() {
 		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-		
 		connectionManager.setMaxTotal(EthiopiaEmrCustomModuleConstants.HTTP_MAX_TOTAL_CONNECTIONS);
 		connectionManager.setDefaultMaxPerRoute(EthiopiaEmrCustomModuleConstants.HTTP_MAX_CONNECTIONS_PER_ROUTE);
 		
 		CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).build();
-		
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 		
 		factory.setConnectTimeout(EthiopiaEmrCustomModuleConstants.HTTP_CONNECT_TIMEOUT);
@@ -95,5 +111,4 @@ public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpCli
 		
 		return factory;
 	}
-	
 }

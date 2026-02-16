@@ -44,6 +44,15 @@
         <property name="targetMethod" value="initialize"/>
     </bean>
 
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService</value>
+                <ref bean="ethiopiaemrcustommodule.HttpClientService"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="ethiopiaemrcustommodule.MPIPatientDetailProxyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>

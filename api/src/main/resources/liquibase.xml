@@ -42,4 +42,26 @@
                                  referencedTableName="encounter"
                                  referencedColumnNames="encounter_id"/>
     </changeSet>
+    <changeSet id="ethiopiaemrcustommodule-20231028-1000" author="said murad">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM scheduler_task_config
+                WHERE schedulable_class = 'org.openmrs.module.ethiopiaemrcustommodule.task.PrescriptionTransmissionTask'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserting Prescription Transmission Task into scheduler_task_config</comment>
+        <insert tableName="scheduler_task_config">
+            <column name="name" value="Prescription Transmission Task" />
+            <column name="description" value="Sends pending drug orders to the eapts pharmacy system" />
+            <column name="schedulable_class" value="org.openmrs.module.ethiopiaemrcustommodule.task.PrescriptionTransmissionTask" />
+            <column name="start_time" valueDate="2023-10-28T09:00:00" />
+            <column name="start_time_pattern" value="MM/dd/yyyy HH:mm:ss" />
+            <column name="repeat_interval" value="20" /> <!-- 20 seconds -->
+            <column name="start_on_startup" value="1" />
+            <column name="started" value="1" />
+            <column name="date_created" valueDate="CURRENT_TIMESTAMP" />
+            <column name="created_by" value="1" />
+            <column name="uuid" value="7e3b8f2a-d3c4-4e5f-b6a1-9c8d7e6f5a4b" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>
