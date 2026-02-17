@@ -17,4 +17,11 @@ public interface HttpClientService {
 	
 	// GET with custom headers
 	<T> ResponseEntity<T> get(String url, Class<T> responseType, Map<String, String> extraHeaders);
+	
+	/**
+	 * Retrieves the API Key for OpenFn from Environment Variables or Runtime Properties.
+	 * 
+	 * @return the API Key string
+	 */
+	String getOpenfnApiKey();
 }

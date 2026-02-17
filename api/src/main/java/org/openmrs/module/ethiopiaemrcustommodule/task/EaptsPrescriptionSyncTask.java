@@ -17,7 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EaptsPrescriptionSyncTask extends AbstractTask {
 	
@@ -59,12 +61,18 @@ public class EaptsPrescriptionSyncTask extends AbstractTask {
 			if (endpoint == null || endpoint.trim().isEmpty()) {
 				throw new APIException("EAPTS prescription sync endpoint global property is not configured.");
 			}
-			// Optional: Fetch API Key if required by the external system
-			// Map<String, String> headers = new HashMap<>();
-			// headers.put("X-API-KEY", administrationService.getGlobalProperty("ethiopiaemrcustommodule.eaptsPrescriptionSync_api_key"));
-			
+
+			Map<String, String> headers = new HashMap<>();
+			String apiKey = httpClientService.getOpenfnApiKey();
+
+			if (apiKey != null && !apiKey.isEmpty()) {
+				headers.put("X-API-KEY", apiKey);
+			} else {
+				log.warn("API Key is missing from the environment!");
+			}
+
 			// Send the POST request
-			ResponseEntity<String> response = httpClientService.post(endpoint, representation, String.class);
+			ResponseEntity<String> response = httpClientService.post(endpoint, representation, String.class, headers);
 			
 			if (response.getStatusCode().is2xxSuccessful()) {
 				outbox.setStatus(PrescriptionOutboxStatus.SENT);

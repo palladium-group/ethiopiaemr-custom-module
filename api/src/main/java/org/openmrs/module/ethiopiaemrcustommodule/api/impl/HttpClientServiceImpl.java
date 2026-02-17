@@ -7,6 +7,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleConstants;
 import org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService;
@@ -110,5 +111,23 @@ public class HttpClientServiceImpl extends BaseOpenmrsService implements HttpCli
 		factory.setConnectionRequestTimeout(EthiopiaEmrCustomModuleConstants.HTTP_CONNECTION_REQUEST_TIMEOUT);
 		
 		return factory;
+	}
+	
+	@Override
+	public String getOpenfnApiKey() {
+		// Check OS Environment Variable (Best for Docker/Production)
+		String apiKey = System.getenv("OPENFN_API_KEY");
+		
+		// Fallback to OpenMRS Runtime Properties (Best for SDK/Development)
+		if (apiKey == null || apiKey.isEmpty()) {
+			apiKey = org.openmrs.api.context.Context.getRuntimeProperties().getProperty(
+			    "ethiopiaemrcustommodule.openfnApiKey");
+		}
+		
+		if (apiKey == null || apiKey.isEmpty()) {
+			log.warn("OpenFn API Key not found in Environment Variables or Runtime Properties!");
+		}
+		
+		return apiKey;
 	}
 }
