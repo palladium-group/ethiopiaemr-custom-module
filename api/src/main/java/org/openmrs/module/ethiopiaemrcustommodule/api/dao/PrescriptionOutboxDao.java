@@ -1,9 +1,6 @@
 package org.openmrs.module.ethiopiaemrcustommodule.api.dao;
 
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.openmrs.Encounter;
 import org.openmrs.module.ethiopiaemrcustommodule.PrescriptionOutbox;
@@ -27,11 +24,14 @@ public class PrescriptionOutboxDao {
 	}
 	
 	public PrescriptionOutbox getPrescriptionOutboxByUuid(String uuid) {
-		return (PrescriptionOutbox) sessionFactory.getCurrentSession().createCriteria(PrescriptionOutbox.class)
-		        .add(Restrictions.eq("uuid", uuid)).uniqueResult();
+		String hql = "FROM PrescriptionOutbox p WHERE p.uuid = :uuid";
+		
+		Query<PrescriptionOutbox> query = sessionFactory.getCurrentSession().createQuery(hql, PrescriptionOutbox.class);
+		query.setParameter("uuid", uuid);
+		
+		return query.uniqueResult();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<PrescriptionOutbox> getPendingPrescriptions(Integer limit) {
 		String hql = "FROM PrescriptionOutbox p WHERE p.status = :status ORDER BY p.dateCreated ASC";
 		
@@ -47,11 +47,10 @@ public class PrescriptionOutboxDao {
 	}
 	
 	public PrescriptionOutbox getLatestOutboxByEncounter(Encounter encounter) {
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(PrescriptionOutbox.class);
-		crit.add(Restrictions.eq("encounter", encounter));
-		crit.addOrder(Order.desc("dateCreated"));
-		crit.setMaxResults(1);
-		return (PrescriptionOutbox) crit.uniqueResult();
+		String hql = "FROM PrescriptionOutbox p WHERE p.encounter = :encounter ORDER BY p.dateCreated DESC";
+		
+		return sessionFactory.getCurrentSession().createQuery(hql, PrescriptionOutbox.class)
+		        .setParameter("encounter", encounter).setMaxResults(1).uniqueResult();
 	}
 	
 }
