@@ -4,35 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
   		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="ethiopiaemrcustommodule.DrugOrderSyncService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.ethiopiaemrcustommodule.api.impl.DrugOrderSyncServiceImpl">
-                <property name="dao" ref="ethiopiaemrcustommodule.DrugOrderSyncDao"/>
-                <property name="administrationService" ref="adminService"/>
-                <property name="orderService" ref="orderService"/>
-                <property name="patientService" ref="patientService"/>
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>org.openmrs.module.ethiopiaemrcustommodule.api.DrugOrderSyncService</value>
-                <ref bean="ethiopiaemrcustommodule.DrugOrderSyncService"/>
-            </list>
-        </property>
-    </bean>
-
     <!-- HTTP Client Service Configuration -->
     <bean id="ethiopiaemrcustommodule.HttpClientService" class="org.openmrs.module.ethiopiaemrcustommodule.api.impl.HttpClientServiceImpl">
         <property name="administrationService" ref="adminService"/>
@@ -42,6 +13,15 @@
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetObject" ref="ethiopiaemrcustommodule.HttpClientService"/>
         <property name="targetMethod" value="initialize"/>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService</value>
+                <ref bean="ethiopiaemrcustommodule.HttpClientService"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="ethiopiaemrcustommodule.MPIPatientDetailProxyService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -68,6 +48,55 @@
             <list merge="true">
                 <value>org.openmrs.module.ethiopiaemrcustommodule.api.MPIPatientDetailProxyService</value>
                 <ref bean="ethiopiaemrcustommodule.MPIPatientDetailProxyService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="ethiopiaemrcustommodule.PrescriptionOutboxDao" class="org.openmrs.module.ethiopiaemrcustommodule.api.dao.PrescriptionOutboxDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="ethiopiaemrcustommodule.PrescriptionOutboxService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.ethiopiaemrcustommodule.api.impl.PrescriptionOutboxServiceImpl">
+                <property name="dao" ref="ethiopiaemrcustommodule.PrescriptionOutboxDao"/>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <!-- Adds PrescriptionOutboxService to OpenMRS context so it can be accessed calling Context.getService(PrescriptionOutboxService.class) -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.ethiopiaemrcustommodule.api.PrescriptionOutboxService</value>
+                <ref bean="ethiopiaemrcustommodule.PrescriptionOutboxService"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- AOP Advice Configuration -->
+    <bean id="ethiopiaemrcustommodule.PrescriptionSaveAdvice"
+          class="org.openmrs.module.ethiopiaemrcustommodule.api.advice.PrescriptionSaveAdvice">
+        <property name="administrationService" ref="adminService"/>
+    </bean>
+    <bean id="ethiopiaemrcustommodule.PrescriptionAOPConfig" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>encounterService</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>ethiopiaemrcustommodule.PrescriptionSaveAdvice</value>
             </list>
         </property>
     </bean>

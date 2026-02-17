@@ -15,39 +15,14 @@ package org.openmrs.module.ethiopiaemrcustommodule;
 public class EthiopiaEmrCustomModuleConstants {
 	
 	/**
-	 * Global property for the last processed drug order date
+	 * Global property for the eAPTS prescription endpoint URL
 	 */
-	public static final String GP_LAST_PROCESSED_DRUG_ORDER_DATE = "ethioemrcustommodule.lastProcessedDrugOrderDate";
+	public static final String GP_EAPTS_PRESCRIPTION_SYNC_ENDPOINT = "ethiopiaemrcustommodule.eaptsPrescriptionSyncEndpoint";
 	
 	/**
-	 * Global property for the scheduler interval in seconds
+	 * Global property for the drug order encounter type uuid
 	 */
-	public static final String GP_DRUG_ORDER_SYNC_INTERVAL = "ethiopiaemrcustommodule.drugOrderSyncInterval";
-	
-	/**
-	 * Global property for the maximum number of drug orders to process per run
-	 */
-	public static final String GP_DRUG_ORDER_SYNC_BATCH_SIZE = "ethiopiaemrcustommodule.drugOrderSyncBatchSize";
-	
-	/**
-	 * Global property for the external endpoint URL
-	 */
-	public static final String GP_DRUG_ORDER_SYNC_ENDPOINT = "ethiopiaemrcustommodule.drugOrderSyncEndpoint";
-	
-	/**
-	 * Default scheduler interval in seconds (5 minutes)
-	 */
-	public static final int DEFAULT_SYNC_INTERVAL = 300;
-	
-	/**
-	 * Default batch size
-	 */
-	public static final int DEFAULT_BATCH_SIZE = 100;
-	
-	/**
-	 * Default endpoint URL
-	 */
-	public static final String DEFAULT_ENDPOINT = "http://localhost:3000";
+	public static final String GP_DRUG_ORDER_ENCOUNTER_TYPE_UUID = "ethiopiaemrcustommodule.drugOrderEncounterTYpeUuid";
 	
 	/**
 	 * Global property for the MPI patient detail endpoint URL
