@@ -70,14 +70,24 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 		
 		try {
 			String endpoint = getMPIEndpoint();
+			Map<String, String> headers = new HashMap<>();
+			String apiKey = httpClientService.getOpenfnApiKey();
+
+			if (apiKey != null && !apiKey.isEmpty()) {
+				headers.put("X-API-KEY", apiKey);
+			} else {
+				log.warn("API Key is missing from the environment!");
+			}
 			
 			Map<String, String> requestPayload = new HashMap<>();
 			requestPayload.put("healthId", healthId);
 
+
 			ResponseEntity<MPIPatientResponseDTO> response = httpClientService.post(
 					endpoint,
 					requestPayload,
-					MPIPatientResponseDTO.class
+					MPIPatientResponseDTO.class,
+					headers
 			);
 
 			MPIPatientResponseDTO apiResponse = response.getBody();
