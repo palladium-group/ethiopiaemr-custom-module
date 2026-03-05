@@ -24,6 +24,15 @@ public class FHIRAddressDTO {
 	@JsonProperty("address1")
 	private String address1;
 	
+	@JsonProperty("address4")
+	private String address4;
+	
+	@JsonProperty("countyDistrict")
+	private String countyDistrict;
+	
+	@JsonProperty("stateProvince")
+	private String stateProvince;
+	
 	public String getCountry() {
 		return country;
 	}
@@ -38,5 +47,29 @@ public class FHIRAddressDTO {
 	
 	public void setAddress1(String address1) {
 		this.address1 = address1;
+	}
+	
+	public String getAddress4() {
+		return address4;
+	}
+	
+	public void setAddress4(String address4) {
+		this.address4 = address4;
+	}
+	
+	public String getCountyDistrict() {
+		return countyDistrict;
+	}
+	
+	public void setCountyDistrict(String countyDistrict) {
+		this.countyDistrict = countyDistrict;
+	}
+	
+	public String getStateProvince() {
+		return stateProvince;
+	}
+	
+	public void setStateProvince(String stateProvince) {
+		this.stateProvince = stateProvince;
 	}
 }
