@@ -22,6 +22,7 @@ import org.openmrs.module.ethiopiaemrcustommodule.EthiopiaEmrCustomModuleConstan
 import org.openmrs.module.ethiopiaemrcustommodule.api.HttpClientService;
 import org.openmrs.module.ethiopiaemrcustommodule.api.MPIPatientDetailProxyService;
 import org.openmrs.module.ethiopiaemrcustommodule.dto.FHIRPatientResponseDTO;
+import org.openmrs.module.ethiopiaemrcustommodule.dto.MPIDataWrapperDTO;
 import org.openmrs.module.ethiopiaemrcustommodule.dto.MPIPatientResponseDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -97,12 +98,18 @@ public class MPIPatientDetailProxyServiceImpl extends BaseOpenmrsService impleme
 				throw new APIException("ethiopiaemrcustommodule.error.mpiNullResponse");
 			}
 
-			FHIRPatientResponseDTO responseDTO = apiResponse.getData();
-			if (responseDTO == null || responseDTO.isPatientNotFound()) {
+			MPIDataWrapperDTO wrapper = apiResponse.getData();
+			if (wrapper == null || !wrapper.isSuccess() || wrapper.getData() == null) {
 				log.info("Patient with healthId " + healthId + " not found in MPI.");
 				return null;
 			}
-			
+
+			// Map format (data.data + message + success) to client DTO (fhir + message + success + patientNotFound)
+			FHIRPatientResponseDTO responseDTO = new FHIRPatientResponseDTO();
+			responseDTO.setFhir(wrapper.getData());
+			responseDTO.setMessage(wrapper.getMessage());
+			responseDTO.setSuccess(wrapper.getSuccess());
+			responseDTO.setPatientNotFound(false);
 			return responseDTO;
 			
 		}

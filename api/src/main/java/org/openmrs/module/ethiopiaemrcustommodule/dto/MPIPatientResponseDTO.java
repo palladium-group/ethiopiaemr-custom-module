@@ -10,16 +10,16 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class MPIPatientResponseDTO {
 	
 	@JsonProperty("data")
-	private FHIRPatientResponseDTO data;
+	private MPIDataWrapperDTO data;
 	
 	@JsonProperty("meta")
 	private MPIMetaDTO meta;
 	
-	public FHIRPatientResponseDTO getData() {
+	public MPIDataWrapperDTO getData() {
 		return data;
 	}
 	
-	public void setData(FHIRPatientResponseDTO data) {
+	public void setData(MPIDataWrapperDTO data) {
 		this.data = data;
 	}
 	
