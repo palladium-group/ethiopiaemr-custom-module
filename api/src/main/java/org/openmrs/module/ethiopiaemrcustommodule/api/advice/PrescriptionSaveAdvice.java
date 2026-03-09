@@ -31,15 +31,15 @@ public class PrescriptionSaveAdvice implements AfterReturningAdvice {
 		if (!method.getName().equals("saveEncounter")) {
 			return;
 		}
-		String drugOrderEncounterTypeUuid = administrationService
-		        .getGlobalProperty(EthiopiaEmrCustomModuleConstants.GP_DRUG_ORDER_ENCOUNTER_TYPE_UUID);
-		if (drugOrderEncounterTypeUuid == null || drugOrderEncounterTypeUuid.trim().isEmpty()) {
-			throw new APIException("Drug order encounter type UUID global property is not configured.");
+		String orderEncounterTypeUuid = administrationService
+		        .getGlobalProperty(EthiopiaEmrCustomModuleConstants.GP_ORDER_ENCOUNTER_TYPE_UUID);
+		if (orderEncounterTypeUuid == null || orderEncounterTypeUuid.trim().isEmpty()) {
+			throw new APIException("Order encounter type UUID global property is not configured.");
 		}
 		Encounter encounter = (Encounter) returnValue;
 		// Check if this is the right encounter type
 		if (encounter != null && encounter.getEncounterType() != null
-		        && drugOrderEncounterTypeUuid.equals(encounter.getEncounterType().getUuid())) {
+		        && orderEncounterTypeUuid.equals(encounter.getEncounterType().getUuid())) {
 			
 			saveToOutbox(encounter);
 		}

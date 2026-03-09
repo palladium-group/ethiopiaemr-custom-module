@@ -20,9 +20,9 @@ public class EthiopiaEmrCustomModuleConstants {
 	public static final String GP_EAPTS_PRESCRIPTION_SYNC_ENDPOINT = "ethiopiaemrcustommodule.eaptsPrescriptionSyncEndpoint";
 	
 	/**
-	 * Global property for the drug order encounter type uuid
+	 * Global property for the order encounter type uuid
 	 */
-	public static final String GP_DRUG_ORDER_ENCOUNTER_TYPE_UUID = "ethiopiaemrcustommodule.drugOrderEncounterTYpeUuid";
+	public static final String GP_ORDER_ENCOUNTER_TYPE_UUID = "ethiopiaemrcustommodule.orderEncounterTypeUuid";
 	
 	/**
 	 * Global property for the MPI patient detail endpoint URL
