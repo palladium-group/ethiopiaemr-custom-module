@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * DTO for the inner "data" wrapper in the MPI response.  format: { "data": { "data":
+ * DTO for the inner "data" wrapper in the MPI response. format: { "data": { "data":
  * &lt;patient&gt;, "message": "...", "success": true } }
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
