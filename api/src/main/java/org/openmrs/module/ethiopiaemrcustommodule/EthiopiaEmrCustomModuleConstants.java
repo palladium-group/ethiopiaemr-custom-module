@@ -29,6 +29,8 @@ public class EthiopiaEmrCustomModuleConstants {
 	 */
 	public static final String GP_MPI_PATIENT_DETAIL_ENDPOINT = "ethiopiaemrcustommodule.MPIPatientDetailEndpoint";
 	
+	public static final String GP_ALLOW_UNTRUSTED_SSL = "ethiopiaemrcustommodule.allowUntrustedSsl";
+	
 	/**
 	 * HTTP connection timeout in milliseconds
 	 */

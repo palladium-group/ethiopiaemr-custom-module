@@ -28,13 +28,18 @@
 	<require_modules>
 		<require_module version="3.1.0">org.openmrs.module.webservices.rest</require_module>
 	</require_modules>
-	
-	<!-- Servlets -->
-	<!-- REST endpoints are registered via Spring controllers, no servlet configuration needed -->
-	<!-- /Servlets -->
+
+	<!-- Global Properties -->
+	<globalProperty>
+		<property>ethiopiaemrcustommodule.allowUntrustedSsl</property>
+		<defaultValue>false</defaultValue>
+		<description>
+			Set to true to allow HTTP connections to servers with self-signed or untrusted SSL certificates (equivalent to curl -k).
+			Set to false (default) for secure production environments with valid CA certificates.
+		</description>
+	</globalProperty>
 
 	<!-- Internationalization -->
-	<!-- All message codes should start with ethiopiaemrcustommodule.* -->
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>
@@ -47,7 +52,5 @@
 		<lang>es</lang>
 		<file>messages_es.properties</file>
 	</messages>
-	<!-- /Internationalization -->
-	
-</module>
 
+</module>
